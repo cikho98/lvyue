@@ -17,7 +17,7 @@ def mysql(database, sql):
     conn.commit()
     result = cursor.fetchall()
     desc = cursor.description
-    desc = list(desc)
+    desc = data(desc)
     for j in range(0, len(result)):
         response = {}
         for i in range(0, len(desc)):
