@@ -2,6 +2,11 @@ import requests
 import random
 import os
 import json
+from seleniumwire import webdriver  # Import from seleniumwire
+# from selenium import webdriver
+
+
+
 
 class SpiderSina:
     def __init__(self):
@@ -52,7 +57,7 @@ class SpiderSina:
         with open("./path/"+str(uid)+"/headephoto/"+str(uid)+".jpg","wb") as a:
             a.write(heade.content)
         # https://weibo.com/ajax/statuses/mymblog?uid=2263026375&page=1&feature=0
-        # 'https://weibo.com/ajax/statuses/mymblog?uid=2410655081&page=1&feature=0'
+        # https://weibo.com/ajax/statuses/mymblog?uid=7055099262&page=1&feature=0
         profile_path="/ajax/statuses/mymblog"
         par="?uid={}&page=1&feature=0"
         profile_url=self.BASE+profile_path+par.format(uid)
@@ -60,9 +65,9 @@ class SpiderSina:
 
     # 爬取个人信息动态前一页
     def spiderDynamic(self,profile_url):
-        print(profile_url)
-        re=requests.get(profile_url,headers=self.headers).json()
-        print(re)
+        self.headers["cookie"]="SUB=_2AkMVQ5b2f8NxqwJRmfgVy2njaYt-ywHEieKjH2ctJRMxHRl-yT8Xql0OtRB6PsO4GXRWdUjqnqe7PCZHUJbNtMYxRqre; SUBP=0033WrSXqPxfM72-Ws9jqgMF55529P9D9WF37zSGXUl4odEWSBrB_q2z; SINAGLOBAL=9004044209628.855.1646205392474; ULV=1646205392555:1:1:1:9004044209628.855.1646205392474:; XSRF-TOKEN=5u680fnRvE8dGW6O2-0rVmVs; WBPSESS=yr8Ogb3qBlrorv2L6-ukSjrnUfaur8LpE8mb-kS1x90zOtxKCv0Sq66NqMu8FzeONSb_5CKk8-ZfOF_einAcUSUFwc-Mp0qjRQr9BZDOH1TYY7uvkDjgckUfWg1wsRd0OjM8WFTpzuobn3ywdZCu8t1IdPWk2BwrhoK2g5MjVNk="
+        re=requests.get(profile_url,headers=self.headers)
+        print(re.text)
         # with open("./path/"+str(uid)+"/dynamic/用户动态详情第一页.js","w+") as g:
         #     g.write(json.dumps(re))
         # list=re["data"]["list"]
@@ -88,6 +93,26 @@ class SpiderSina:
         #             dymaic.write(dynamicPhoto.content)
 
 
+    def driver_chrome(self):
+
+        # Create a new instance of the Chrome driver
+        path=r"F:\python3.7\Lib\site-packages\seleniumwire\undetected_chromedriver\chromedriver.exe"
+        driver = webdriver.Chrome(executable_path=path)
+
+        # Go to the Google home page
+        driver.get('https://weibo.com/newlogin?tabtype=weibo&gid=1028032288&url=https%3A%2F%2Fweibo.com%2F')
+
+        # Access requests via the `requests` attribute
+        for request in driver.requests:
+            if request.response:
+                print(
+                    # request.url,
+                    # request.response.status_code,
+                    request.response.headers
+        )
 
 ss=SpiderSina()
-ss.spiderHeade()
+# ss.spiderHeade()
+url="https://weibo.com/ajax/statuses/mymblog?uid=2030348253&page=1&feature=0"
+# ss.spiderDynamic(url)
+ss.driver_chrome()
